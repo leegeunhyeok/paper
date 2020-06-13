@@ -1,0 +1,79 @@
+@import 'common';
+
+body.theme-dark::before {
+  @include background;
+  background-color: $bgPrimary--dark;
+}
+
+.login {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  @include themed () {
+    background-color: t($backgroundPrimary);
+  }
+
+  &__form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 2rem;
+
+      @include themed () {
+        color: t($textPrimary);
+      }
+    }
+
+    &__error {
+      position: absolute;
+      top: 2.5rem;
+      left: 0;
+      width: 100%;
+      opacity: 1;
+      color: $red;
+      font-size: 1rem;
+      font-weight: bold;
+      -webkit-transition: opacity $transition-duration;
+              transition: opacity $transition-duration;
+    
+
+      &.hidden {
+        opacity: 0;
+      }
+    }
+
+    &__control {
+
+      input {
+        width: 240px;
+        margin-bottom: .5rem;
+      }
+
+      button {
+        cursor: pointer;
+        width: 100%;
+        -webkit-transition: background-color $transition-quick-duration;
+                transition: background-color $transition-quick-duration;
+
+        @include themed () {
+          border: 1px solid t($buttonPrimary);
+
+          &:hover, &:active {
+            background-color: t($buttonPrimaryActive);
+          }
+        }
+      }
+    }
+  }
+}
+
+@import 'button';
+@import 'input';
+@import 'alert';

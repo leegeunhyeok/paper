@@ -1,0 +1,67 @@
+@import 'variables';
+
+@mixin icon {
+  cursor: pointer;
+  display: inline-block;
+  width: $icon-size;
+  height: $icon-size;
+}
+
+span.icon {
+  @include icon;
+}
+
+span.menu {
+  background-image: url('/images/menu.svg');
+  border-radius: 50%;
+  -webkit-transition: background-color $transition-quick-duration;
+          transition: background-color $transition-quick-duration;
+
+  @include themed () {
+    &:hover {
+      background-color: t($buttonSecondaryHover);
+    }
+  
+    &:active {
+      background-color: t($buttonSecondaryActive);
+    }
+  }
+}
+
+span.clear {
+  background-image: url('/images/clear.svg');
+  border-radius: 50%;
+  -webkit-transition: background-color $transition-quick-duration;
+          transition: background-color $transition-quick-duration;
+
+  @include themed () {
+    &:hover {
+      background-color: t($buttonSecondaryHover);
+    }
+    
+    &:active {
+      background-color: t($buttonSecondaryActive);
+    }
+  }
+}
+
+span.favorite {
+  position: relative;
+  background-image: url('/images/favorite.svg');
+
+  &::before {
+    @include icon;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url('/images/favorite_active.svg');
+    opacity: 0;
+    -webkit-transition: opacity $transition-quick-duration;
+            transition: opacity $transition-quick-duration;
+  }
+
+  &.active::before {
+    opacity: 1;
+  }
+}

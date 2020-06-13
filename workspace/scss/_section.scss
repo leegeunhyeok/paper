@@ -1,0 +1,39 @@
+@mixin post-section {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 1rem;
+  margin: auto;
+  margin-bottom: 1rem;
+}
+
+section {
+  &.control {
+    padding: 0 1rem;
+    padding-top: 5rem;
+    margin: auto;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 800px;
+    max-height: 300px;
+    overflow: hidden;
+    -webkit-transition: 1s;
+            transition: 1s;
+
+    &.disabled {
+      max-height: 0;
+    }
+  }
+
+  &.post {
+    @include post-section;
+
+    &--loading {
+      @include post-section;
+      overflow: hidden;
+    }
+  }
+
+  &.job {
+    @include post-section;
+  }
+}

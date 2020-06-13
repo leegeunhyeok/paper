@@ -1,0 +1,41 @@
+{
+  "name": "paper",
+  "version": "1.0.0",
+  "description": "PWA Example",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node server/app.js",
+    "sass": "node-sass --w workspace/scss -o workspace/css",
+    "build-style": "node-sass workspace/scss -o workspace/css",
+    "build": "babel workspace/js -d workspace/dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leegeunhyeok/paper.git"
+  },
+  "keywords": [
+    "pwa"
+  ],
+  "author": "Geunhyeok LEE <dev.ghlee@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/leegeunhyeok/paper/issues"
+  },
+  "homepage": "https://github.com/leegeunhyeok/paper#readme",
+  "dependencies": {
+    "argparse": "^1.0.10",
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "config": "^3.2.4",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "web-push": "^3.4.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "eslint": "^6.7.2",
+    "node-sass": "^4.14.1"
+  }
+}

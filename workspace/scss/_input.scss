@@ -1,0 +1,32 @@
+input, textarea {
+  outline: none;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 3px;
+  font-size: 1rem;
+  overflow: hidden;
+  -webkit-appearance: none;
+  -webkit-user-select: initial !important;
+          user-select: initial !important;
+  -webkit-transition: background-color .3s;
+          transition: background-color .3s;
+
+  @include themed () {
+    border: 1px solid t($backgroundSecondary);
+    background-color: t($backgroundSecondary);
+    color: t($textPrimary);
+  }
+
+  &:active, &:focus {
+    @include themed () {
+      background-color: t($buttonSecondaryActive);
+    }
+  }
+
+  &::placeholder,
+  &::-webkit-input-placeholder {
+    @include themed () {
+      color: t($textSecondary);
+    }
+  }
+}

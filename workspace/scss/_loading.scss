@@ -1,0 +1,54 @@
+div.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  opacity: .5;
+  -webkit-transition: opacity $transition-duration;
+          transition: opacity $transition-duration;
+
+  @include themed () {
+    background-color: t($backgroundPrimary);
+  }
+  
+  &.hidden {
+    opacity: 0;
+  }
+
+  .indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    padding: 15px;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+
+    span {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      opacity: 1;
+      -webkit-transform: scale(0);
+              transform: scale(0);
+      -webkit-animation: scale .5s alternate infinite;
+              animation: scale .5s alternate infinite;
+
+      @include themed () {
+        background-color: t($textPrimary);
+      }
+    }
+  }
+}
+
+@keyframes scale {
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}

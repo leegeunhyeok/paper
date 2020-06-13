@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta name=description content="Paper PWA">
+    <title>PWA | Paper - Login</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <!--[if IE]><link rel="icon" href="/favicon.ico"><![endif]-->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <div class="login">
+      <form id="form" class="login__form">
+        <h1>Paper</h1>
+        <div id="error" class="login__form__error hidden">
+          <!-- 에러 메시지 -->
+        </div>
+        <div class="login__form__control">
+          <input
+            id="userName"
+            type="text"
+            placeholder="Name"
+            spellcheck="false"
+          >
+        </div>
+        <div class="login__form__control">
+          <button id="login" class="primary" aria-label="Login">LOGIN</button>
+        </div>
+      </form>
+      <div id="alert" class="alert hidden">
+        <!-- 알림 메시지 -->
+      </div>
+      <!-- 오프라인 알림 영역 -->
+      <div id="offline_alert" class="offline-alert hidden">
+        현재 오프라인 상태입니다
+      </div>
+    </div>
+    <script src="/js/util.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/login.js"></script>
+  </body>
+</html>

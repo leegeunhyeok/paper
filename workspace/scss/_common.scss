@@ -1,0 +1,115 @@
+@import 'variables';
+@import 'themes';
+
+@font-face {
+  font-family: 'NanumSquareRound';
+  src: url('/fonts/NanumSquareRoundR.eot');
+  src: url('/fonts/NanumSquareRoundR.eot#iefix') format('embedded-opentype'),
+  url('/fonts/NanumSquareRoundR.woff') format('woff'),
+  url('/fonts/NanumSquareRoundR.ttf') format('truetype');
+  src: local(¡Ø), url('/fonts/NanumSquareRoundR.woff') format('woff');
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'NanumSquareRound';
+  src: url('/fonts/NanumSquareRoundL.eot');
+  src: url('/fonts/NanumSquareRoundL.eot#iefix') format('embedded-opentype'),
+  url('/fonts/NanumSquareRoundL.woff') format('woff'),
+  url('/fonts/NanumSquareRoundL.ttf') format('truetype');
+  src: local(¡Ø), url('/fonts/NanumSquareRoundL.woff') format('woff');
+  font-weight: 300;
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'NanumSquareRound';
+  src: url('/fonts/NanumSquareRoundR.eot');
+  src: url('/fonts/NanumSquareRoundR.eot#iefix') format('embedded-opentype'),
+  url('/fonts/NanumSquareRoundR.woff') format('woff'),
+  url('/fonts/NanumSquareRoundR.ttf') format('truetype');
+  src: local(¡Ø), url('/fonts/NanumSquareRoundR.woff') format('woff');
+  font-weight: 400;
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'NanumSquareRound';
+  src: url('/fonts/NanumSquareRoundB.eot');
+  src: url('/fonts/NanumSquareRoundB.eot#iefix') format('embedded-opentype'),
+  url('/fonts/NanumSquareRoundB.woff') format('woff'),
+  url('/fonts/NanumSquareRoundB.ttf') format('truetype');
+  src: local(¡Ø), url('/fonts/NanumSquareRoundB.woff') format('woff');
+  font-weight: 700;
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'NanumSquareRound';
+  src: url('/fonts/NanumSquareRoundEB.eot');
+  src: url('/fonts/NanumSquareRoundEB.eot#iefix') format('embedded-opentype'),
+  url('/fonts/NanumSquareRoundEB.woff') format('woff'),
+  url('/fonts/NanumSquareRoundEB.ttf') format('truetype');
+  src: local(¡Ø), url('/fonts/NanumSquareRoundEB.woff') format('woff');
+  font-weight: 800;
+  font-display: fallback;
+}
+
+@mixin background () {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+}
+
+* {
+  font-family: 'NanumSquareRound','Apple SD Gothic Neo','나눔고딕',NanumGothic,'Nanum Gothic','맑은 고딕','Malgun Gothic','돋움',dotum,AppleGothic,sans-serif;
+  box-sizing: border-box;
+}
+
+.hide {
+  visibility: hidden;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+
+  @include themed () {
+    color: t($textPrimary);
+  }
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+          user-select: none;
+
+  &.theme--light {
+    background-color: $bgPrimary--light;
+
+    &::before {
+      @include background;
+      background-color: $bgSecondary--light;
+    }
+  }
+
+  &.theme--dark {
+    background-color: $bgPrimary--dark;
+
+    &::before {
+      @include background;
+      background-color: $bgSecondary--dark;
+    }
+  }
+}

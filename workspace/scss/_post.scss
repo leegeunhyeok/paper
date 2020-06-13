@@ -1,0 +1,211 @@
+article {
+  position: relative;
+  width: 100%;
+  padding: 15px 30px;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+
+  @include themed () {
+    background-color: t($backgroundTertiary);
+  }
+
+  header {
+    position: relative;
+    padding: .5rem 0;
+
+    h2 {
+      display: inline-block;
+      margin: 0;
+      max-width: calc(100% - #{$icon-size});
+      border-radius: 1rem;
+      word-break: break-all;
+      line-height: 100%;
+      -webkit-transition: .3s;
+              transition: .3s;
+
+      @include themed () {
+        color: t($textPrimary);
+
+        &.id {
+          padding: .4rem .8rem;
+          background-color: t(buttonPrimary);
+          color: t(buttonPrimaryText);
+        }
+      }
+    }
+
+    span {
+      float: right;
+    }
+
+    .menu-list {
+      position: absolute;
+      top: 2rem;
+      right: 0;
+      width: 90px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+      border-radius: 5px;
+      max-height: 0;
+      overflow: hidden;
+      -webkit-transition: max-height $transition-duration;
+              transition: max-height $transition-duration;
+
+      @include themed () {
+        background-color: t($menuBackground);
+      }
+
+      &.show {
+        max-height: 100px;
+      }
+
+      &__item {
+        cursor: pointer;
+        padding: 10px 12px;
+        text-align: right;
+        -webkit-transition: background-color $transition-quick-duration;
+                transition: background-color $transition-quick-duration;
+
+        &.delete {
+          color: $red;
+          background: url('/images/delete.svg') no-repeat 24px 24px;
+          background-position: 6px;
+        }
+
+        &:hover, &:active {
+          @include themed () {
+            background-color: t($menuBackgroundActive);
+          }
+        }
+      }
+    }
+  }
+
+  summary {
+    display: block;
+    overflow: hidden;
+
+    & > .name {
+      float: left;
+
+      @include themed () {
+        color: t($textSecondary);
+      }
+    }
+
+    & > time {
+      float: right;
+      @include themed () {
+        color: t($textSecondary);
+      }
+    }
+  }
+
+
+  figure {
+    @media only screen and (max-width: 500px) {
+      margin-inline-start: 0;
+      margin-inline-end: 0;
+    }
+
+    img {
+      width: 100%;
+      border-radius: 8px;
+      -webkit-user-drag: none;
+    }
+  }
+
+  p {
+    word-break: break-all;
+
+    @include themed () {
+      color: t($textPrimary);
+    }
+  }
+
+  footer {
+    overflow: hidden;
+
+    & .icon {
+      float: left;
+    }
+
+    & .favorite-count {
+      float: left;
+      height: $icon-size;
+      margin-left: .2rem;
+      line-height: $icon-size + 2px;
+      color: lighten($pink, 10%);
+    }
+  }
+
+  &.job-item {
+    opacity: .5;
+
+    @include themed () {
+      background-color: t($backgroundTertiary);
+      color: t($textSecondary);
+    }
+
+    & h2.delete {
+      color: $red;
+    }
+  }
+
+  &.loading {
+    height: 35vh;
+    min-height: 200px;
+
+    @mixin content-loading {
+      border-radius: 3px;
+      background-size: 400% 100% !important;
+      -webkit-animation: slide 3s linear infinite;
+              animation: slide 3s linear infinite;
+
+      @include themed() {
+        background: linear-gradient(
+          to right,
+          t($backgroundSecondary),
+          t($buttonSecondaryActive),
+          t($backgroundSecondary) 20%,
+          t($backgroundSecondary) 100%
+        );
+      }
+    }
+
+    & > .title {
+      @include content-loading;
+      width: 100%;
+      height: 2rem;
+      margin: 1rem 0;
+    }
+
+    & > .content {
+      @include content-loading;
+      height: 1rem;
+      margin-bottom: .5rem;
+      width: 40%;
+
+      &:nth-child(2) {
+        width: 50% !important;
+      }
+
+      &:nth-child(3) {
+        width: 75% !important;
+      }
+
+      &:nth-child(4) {
+        width: 40% !important;
+      }
+    }
+  }
+}
+
+@keyframes slide {
+  0% {
+    background-position: 70% 0%;
+  }
+
+  100% {
+    background-position: -200% 0%;
+  }
+}

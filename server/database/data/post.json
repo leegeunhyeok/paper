@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "author": "user",
+    "title": "오늘의 고양이",
+    "date": "2019-12-06",
+    "content": "오늘은 귀여운 고양이를 만났다.",
+    "image": "/upload/cat_1.jpg",
+    "favorite": [
+      "user"
+    ]
+  },
+  {
+    "id": 2,
+    "author": "user",
+    "title": "오늘의 고양이",
+    "date": "2019-12-07",
+    "content": "야옹~야옹~야옹",
+    "image": "/upload/cat_2.jpg",
+    "favorite": []
+  }
+]

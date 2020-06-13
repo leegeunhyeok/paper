@@ -1,0 +1,84 @@
+$red: tomato;
+$blue: dodgerblue;
+$white: white;
+$pink: #ff64a0;
+$shadow: rgba(0, 0, 0, .5);
+
+$bgPrimary--light: #fff;
+$bgSecondary--light: #eee;
+$bgTertiary--light: #fff;
+$fgPrimary--light: #000;
+$fgSecondary--light: #555;
+$btnPrimary--light: #000;
+$btnPrimary-text--light: #fff;
+$btnPrimary-hover--light: #222;
+$btnPrimary-active--light: #555;
+$btnSecondary--light: #fff;
+$btnSecondary-text--light: #000;
+$btnSecondary-hover--light: #eee;
+$btnSecondary-active--light: #aaa;
+
+$bgPrimary--dark: #000;
+$bgSecondary--dark: #212121;
+$bgTertiary--dark: #303030;
+$fgPrimary--dark: #fff;
+$fgSecondary--dark: #aaa;
+$btnPrimary--dark: #fff;
+$btnPrimary-text--dark: #000;
+$btnPrimary-hover--dark: #eee;
+$btnPrimary-active--dark: #aaa;
+$btnSecondary--dark: #000;
+$btnSecondary-text--dark: #fff;
+$btnSecondary-hover--dark: #222;
+$btnSecondary-active--dark: #555;
+
+$themes: (
+  light: (
+    backgroundPrimary: $bgPrimary--light,
+    backgroundSecondary: $bgSecondary--light,
+    backgroundTertiary: $bgTertiary--light,
+    textPrimary: $fgPrimary--light,
+    textSecondary: $fgSecondary--light,
+    buttonPrimary: $btnPrimary--light,
+    buttonPrimaryText: $btnPrimary-text--light,
+    buttonPrimaryActive: $btnPrimary-active--light,
+    buttonSecondary: $btnSecondary--light,
+    buttonSecondaryText: $btnSecondary-text--light,
+    buttonSecondaryActive: $btnSecondary-active--light,
+    menuBackground: $bgPrimary--light,
+    menuBackgroundActive: $bgSecondary--light,
+  ),
+  dark: (
+    backgroundPrimary: $bgPrimary--dark,
+    backgroundSecondary: $bgSecondary--dark,
+    backgroundTertiary: $bgTertiary--dark,
+    textPrimary: $fgPrimary--dark,
+    textSecondary: $fgSecondary--dark,
+    buttonPrimary: $btnPrimary--dark,
+    buttonPrimaryText: $btnPrimary-text--dark,
+    buttonPrimaryActive: $btnPrimary-active--dark,
+    buttonSecondary: $btnSecondary--dark,
+    buttonSecondaryText: $btnSecondary-text--dark,
+    buttonSecondaryActive: $btnSecondary-active--dark,
+    menuBackground: $bgSecondary--dark,
+    menuBackgroundActive: $bgTertiary--dark,
+  )
+);
+
+@mixin themed() {
+  @each $theme, $map in $themes {
+    .theme--#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function t($key) {
+  @return map-get($theme-map, $key);
+}

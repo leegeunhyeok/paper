@@ -1,0 +1,44 @@
+@import 'common';
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  -webkit-transition: opacity $transition-duration;
+          transition: opacity $transition-duration;
+}
+
+.fadein {
+  -webkit-animation: fadein $transition-duration;
+          animation: fadein $transition-duration;
+}
+
+.fadeout {
+  -webkit-animation: fadeout $transition-duration;
+          animation: fadeout $transition-duration;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }}
+
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }}
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }}
+
+@-webkit-keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }}
+
+@import 'app';
+@import 'icon';
+@import 'alert';
+@import 'button';
+@import 'input';
+@import 'loading';
+@import 'paper-modal';

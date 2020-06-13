@@ -1,0 +1,83 @@
+button {
+  cursor: pointer;
+  outline: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  border-radius: 3px;
+  -webkit-transition: background-color $transition-quick-duration;
+          transition: background-color $transition-quick-duration;
+
+  &.primary {
+    @include themed () {
+      border: 1px solid t($buttonPrimary);
+      background-color: t($buttonPrimary);
+      color: t($buttonPrimaryText);
+
+      &:hover {
+        background-color: t($buttonPrimaryHover);
+      }
+      
+      &:active {
+        background-color: t($buttonPrimaryActive);
+      }
+    }
+  }
+  
+  &.secondary {
+    @include themed () {
+      border: 1px solid t($buttonPrimary);
+      background-color: t($buttonSecondary);
+      color: t($buttonSecondaryText);
+
+      &:hover {
+        background-color: t($buttonSecondaryHover);
+      }
+      
+      &:active {
+        background-color: t($buttonSecondaryActive);
+      }
+    }
+  }
+
+
+  &.notification {
+    padding: 14px;
+    padding-left: 40px;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 5px;
+    color: $white;
+    font-size: 1rem;
+    background: url('/images/notification.svg') no-repeat 24px 24px;
+    background-position: 10px;
+    background-color: $blue;
+    -webkit-transition: .3s;
+            transition: .3s;
+
+    &:hover {
+      background-color: darken($blue, 5%);
+    }
+    
+    &:active {
+      background-color: darken($blue, 10%);
+    }
+
+    &.granted {
+      background: url('/images/notification_enabled.svg') no-repeat 24px 24px;
+      background-position: 10px;
+      background-color: $red;
+    }
+
+    &.denied {
+      cursor: not-allowed;
+      background: url('/images/notification_disabled.svg') no-repeat 24px 24px;
+      background-position: 10px;
+      background-color: $blue;
+      opacity: .5;
+
+      &:hover, &:active {
+        background-color: $blue;
+      }
+    }
+  }
+}

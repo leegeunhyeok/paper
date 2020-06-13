@@ -1,0 +1,46 @@
+.alert {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 1.4rem 1rem;
+  box-shadow: 0 0 15px $shadow;
+  text-align: center;
+  font-size: 1rem;
+  word-break: keep-all;
+  z-index: 6;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  -webkit-transition: $transition-lazy-duration;
+          transition: $transition-lazy-duration;
+  
+  @include themed () {
+    background-color: t($backgroundTertiary);
+    color: t($textPrimary);
+  }
+
+  &.hidden {
+    opacity: 0;
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+  }
+}
+
+.offline-alert {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 6px;
+  background-color: $red;
+  color: $white;
+  font-size: 1rem;
+  text-align: center;
+  z-index: 3;
+  -webkit-transition: .75s;
+          transition: .75s;
+
+  &.hidden {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
