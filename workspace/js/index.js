@@ -123,16 +123,16 @@ $(function () {
   }
 
   // 좋아요 핸들러
-function onFavorite (id, state) {
-  updatePost(id, state)
-    .then(() => {
-      // @ch6. IndexedDB 게시물 좋아요 상태 갱신
-      paperDB.updatePost(id, state);
-    })
-    .catch(() => {
-      // @ch8. 게시물 업데이트 작업 등록
-    });
-}
+  function onFavorite (id, state) {
+    updatePost(id, state)
+      .then(() => {
+        // @ch6. IndexedDB 게시물 좋아요 상태 갱신
+        paperDB.updatePost(id, state);
+      })
+      .catch(() => {
+        // @ch8. 게시물 업데이트 작업 등록
+      });
+  }
 
   // 게시물 삭제 이벤트 핸들러
   function onDelete (id) {
