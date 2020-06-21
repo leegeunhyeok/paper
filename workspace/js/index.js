@@ -93,6 +93,13 @@ $(function () {
           for (const post of posts) {
             paperDB.savePost(post);
           }
+
+          // 게시물 데이터의 image 값만 추출하여 새로운 배열로 매핑
+          const images = posts.map((post) => post.image);
+
+          // action: sync-image
+          // payload: images
+          toServiceWorker('sync-image', images);
         });
       })
       .catch(() => {
@@ -241,6 +248,25 @@ $(function () {
   // 서비스 워커에게 메시지 전달
   function toServiceWorker (action, payload) {
     // @ch9. 메시지 전달을 통해 서비스 워커에게 작업 요청
+    if (
+      'serviceWorker' in navigator &&
+      navigator.serviceWorker.controller
+    ) {
+      const messageData = { action, payload };
+
+      // 새로운 메시지 채널 생성
+      const channel = new MessageChannel();
+
+      // 반대 포트(port2)에서 전달되는 메시지 수신
+      channel.port1.onmessage = (event) => {
+        console.log('From Service Worker: ' + event.data);
+      };
+
+      navigator
+        .serviceWorker
+        .controller
+        .postMessage(messageData, [channel.port2]); // 2번 포트 전달
+    }
   }
 
   // 푸시 구독
@@ -273,4 +299,12 @@ $(function () {
   })();
 
   // @ch9. 서비스 워커 메시지 이벤트 핸들러 구현
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data === 'job-finished') {
+        updatePostList();
+        updateJobList();
+      }
+    });
+  }
 });

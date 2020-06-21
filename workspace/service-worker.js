@@ -115,6 +115,8 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
+  console.log('Service Worker - sync:', event.tag);
+
   if (event.tag.includes('job-')) {
     const paperDB = new PaperStore();
     const user = event.tag.split('-').pop();
@@ -173,6 +175,44 @@ self.addEventListener('sync', (event) => {
         })).then(() => {
           // 모든 작업 완료
           console.log('Service Worker - Job finished!');
+
+          // 작업이 모두 완료되었을 때, 모든 클라이언트에게 메시지 보내기
+          self.clients.matchAll().then((clients) => {
+            clients.forEach((client) => {
+              client.postMessage('job-finished');
+            });
+          });
+        });
+      })
+    );
+  }
+});
+
+self.addEventListener('message', (event) => {
+  const { action, payload } = event.data;
+  const port = event.ports[0]; // 포트 배열의 첫 번째 요소
+  console.log('Service Worker - message:', action);
+
+  if (action === 'sync-image') {
+    event.waitUntil(
+      // 이미지 캐시 열기
+      caches.open(IMAGE_CACHE_NAME).then((cache) => {
+        // 모든 캐시 목록 조회
+        return cache.keys().then((keys) => {
+          // 캐시된 리소스의 URL을 추출하고,
+          // 실제 게시물 이미지에 포함되지 않은 리소스만 필터링
+          const deleteList = keys
+            .map((request) => new URL(request.url).pathname)
+            .filter((image) => !payload.includes(image));
+
+          // 필터링된 이미지 캐시 제거
+          return Promise.all(deleteList.map((image) => {
+            return cache.delete(image).then((done) => {
+              console.log('Service Worker - Sync image', image, done);
+            });
+          })).then(() => {
+            port.postMessage('Image sync - completed');
+          });
         });
       })
     );
