@@ -259,10 +259,12 @@ class SimpleDatabase {
     let rows = this.select(tableName, config);
 
     if (rows === null) {
-      return {};
+      config.data.id = config.where.id;
+      return this.insert(tableName, config);
     }
 
     rows = Array.isArray(rows) ? rows : [ rows ];
+
     if (rows.length !== 0) {
       return this.update(tableName, config);
     } else {
