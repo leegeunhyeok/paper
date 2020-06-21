@@ -164,6 +164,39 @@ app.put('/api/posts/:id', (req, res) => {
     }
 
     // @ch10. 좋아요 푸시 알림 전송
+    if (!state) {
+      return;
+    } else if (user === updatedPost.author) {
+      logger.debug('본인 게시물에 좋아요를 눌렀습니다.');
+    } else {
+      // 푸시 알림을 받게될 사용자 정보
+      const targetUser = SimpleDatabase.select('user', {
+        where: {
+          id: updatedPost.author
+        }
+      });
+
+      if (targetUser && targetUser.subscription) {
+        const data = {
+          message: `${user}님이 회원님의 게시물을 좋아합니다!`,
+          badge: '/icons/push-badge-72x72.png',
+          icon: '/icons/push-icon-192x192.png'
+        };
+
+        // 구현했던 sendNotification 함수 사용
+        sendNotification(targetUser.subscription, data).then((response) => {
+          if (response.statusCode === 201) {
+            logger.success('알림이 전송되었습니다.');
+          } else {
+            logger.info(response);
+          }
+        }).catch((err) => {
+          logger.error(err.body.trim());
+        });
+      } else {
+        logger.debug('게시물 작성자의 구독 정보가 존재하지 않습니다.');
+      }
+    }
   } catch (err) {
     logger.error(err.message);
     res.status(500).end();

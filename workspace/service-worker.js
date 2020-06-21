@@ -218,3 +218,26 @@ self.addEventListener('message', (event) => {
     );
   }
 });
+
+self.addEventListener('push', (event) => {
+  const data = event.data.json();
+  console.log('Service Worker - push:', data);
+
+  const title = 'Paper';
+  const options = {
+    body: data.message,
+    badge: data.badge,
+    icon: data.icon
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.openWindow('https://google.com')
+  );
+});

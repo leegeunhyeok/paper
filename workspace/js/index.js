@@ -27,6 +27,24 @@ $(function () {
   // 알림 버튼
   notificationButton.addEventListener('click', () => {
     // @ch10. 권한 확인 및 요청
+    if (!pushSupport) {
+      return;
+    } else {
+      Notification.requestPermission().then((permission) => {
+        console.log('Push Permission:', permission);
+        updatePushButton();
+
+        if (Notification.permission !== 'granted') {
+          return;
+        } else {
+          if (userSubscription) {
+            pushUnsubscribe();
+          } else {
+            pushSubscribe();
+          }
+        }
+      });
+    }
   });
 
   // 게시물 작성 버튼
@@ -272,21 +290,98 @@ $(function () {
   // 푸시 구독
   function pushSubscribe () {
     // @ch10. 푸시 구독 기능 구현
+    axios.get('/api/publicKey').then((response) => {
+      // Uint8Array 타입으로 변환
+      const publicKey = util.urlB64ToUint8Array(response.data);
+
+      navigator.serviceWorker.ready.then((registration) => {
+        // 구독 옵션
+        const option = {
+          userVisibleOnly: true,
+          applicationServerKey: publicKey
+        };
+
+        // 푸시 서비스 구독
+        registration
+          .pushManager
+          .subscribe(option)
+          .then((subscription) => {
+            // 애플리케이션 서버로 구독 정보 전달
+            updateSubscription(subscription);
+            userSubscription = subscription;
+            console.log('Push subscribed!', subscription);
+          })
+          .catch((err) => {
+            userSubscription = null;
+            console.error('Push subscribe failed:', err);
+            util.message('푸시 알림을 구독할 수 없습니다.');
+          })
+          .finally(() => {
+            updatePushButton();
+          });
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
   }
 
   // 푸시 구독 취소
   function pushUnsubscribe () {
     // @ch10. 푸시 구독 취소 기능 구현
+    // @ch10. 푸시 구독 취소 기능 구현
+    if (!userSubscription) {
+      return;
+    }
+
+    // 푸시 서비스 구독 취소
+    userSubscription
+      .unsubscribe()
+      .then((result) => {
+        console.log('Push unsubscribed:', result);
+        if (result) {
+          // 애플리케이션 서버에 저장된 구독 정보 지우기
+          updateSubscription(null);
+          userSubscription = null;
+        }
+      })
+      .catch((err) => {
+        console.error('Push unsubscribe failed:', err);
+      })
+      .finally(() => {
+        updatePushButton();
+      });
   }
 
   // 구독 정보 서버로 전달
   function updateSubscription (subscription) {
     // @ch10. 푸시 구독 정보 전송 기능 구현
+    axios.post('/api/pushSubscription', { subscription })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   // 구독 상태에 따라 버튼 스타일 변경
   function updatePushButton () {
     // @ch10. 푸시 구독 상태에 따라 버튼 갱신 기능 구현
+    if (Notification.permission === 'denied') {
+      notificationButton.textContent = '알림 차단됨';
+      notificationButton.classList.add('denied');
+      return;
+    }
+
+    if (userSubscription) {
+      // 구독 상태인 경우
+      notificationButton.textContent = '알림 끄기';
+      notificationButton.classList.add('granted');
+    } else {
+      // 미구독 상태인 경우
+      notificationButton.textContent = '알림 켜기';
+
+      // 스타일 클래스를 모두 제거: 기본 버튼
+      notificationButton.classList.remove('granted');
+      notificationButton.classList.remove('denied');
+    }
   }
 
   // Paper 초기 로딩
@@ -304,6 +399,26 @@ $(function () {
       if (event.data === 'job-finished') {
         updatePostList();
         updateJobList();
+      }
+    });
+
+    // 푸시 기능 지원 여부에 따라 알림 구독 버튼 보이기/숨기기 처리
+    navigator.serviceWorker.ready.then((registration) => {
+      if (registration.pushManager) {
+        pushSupport = true;
+        notificationControl.classList.remove('disabled');
+
+        // 구독 정보 불러오기
+        registration
+          .pushManager
+          .getSubscription()
+          .then((subscription) => {
+            // 구독 정보 가져온 후 userSubscription 변수에 저장
+            userSubscription = subscription;
+          })
+          .finally(() => {
+            updatePushButton();
+          });
       }
     });
   }
