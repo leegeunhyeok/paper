@@ -115,6 +115,8 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
+  console.log('Service Worker - sync:', event.tag);
+
   if (event.tag.includes('job-')) {
     const paperDB = new PaperStore();
     const user = event.tag.split('-').pop();
