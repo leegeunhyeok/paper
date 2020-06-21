@@ -51,6 +51,19 @@ $(function () {
         })
         .catch(() => {
           // @ch8. 게시물 업로드 작업 등록
+          const jobData = {
+            postId: +new Date(),
+            user: userName,
+            title,
+            content,
+            image,
+            action: 'upload'
+          };
+
+          paperDB.addJob(jobData).then(() => {
+            requestBackgroundSync();
+            updateJobList();
+          });
         })
         .finally(() => {
           app.showLoading(false);
@@ -96,6 +109,9 @@ $(function () {
   // 동기화 작업 목록 업데이트
   function updateJobList () {
     // @ch8. IndexedDB 작업 데이터 조회 및 화면에 표시
+    return paperDB.getJobs(userName).then((jobs) => {
+      app.renderJobList(jobs, onCancel);
+    });
   }
 
   // 게시물 업로드
@@ -131,6 +147,17 @@ $(function () {
       })
       .catch(() => {
         // @ch8. 게시물 업데이트 작업 등록
+        const jobData = {
+          postId: id,
+          user: userName,
+          state,
+          action: 'update'
+        };
+
+        paperDB.addJob(jobData).then(() => {
+          requestBackgroundSync();
+          paperDB.updatePost(id, state);
+        });
       });
   }
 
@@ -146,6 +173,16 @@ $(function () {
       })
       .catch(() => {
         // @ch8. 게시물 삭제 작업 등록
+        const jobData = {
+          postId: id,
+          user: userName,
+          action: 'delete'
+        };
+
+        paperDB.addJob(jobData).then(() => {
+          requestBackgroundSync();
+          updateJobList();
+        });
       })
       .finally(() => {
         app.showLoading(false);
@@ -155,16 +192,50 @@ $(function () {
   // 동기화 작업 취소 핸들러
   function onCancel (jobId) {
     // @ch8. 작업 삭제
+    paperDB.deleteJob(jobId);
   }
 
   // 대기 중인 작업 수행
   function doJobs () {
-    // @ch8. 대기중인 작업 수행
+    // 백그라운드 동기화 기능을 지원하는 경우 함수 종료
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      return;
+    }
+
+    paperDB.getJobs(userName).then((jobs) => {
+      Promise.all(jobs.map((job) => {
+        const action = job.action;
+
+        if (action === 'upload') {
+          return uploadPost(job.title, job.content, job.image).then(() => {
+            paperDB.deleteJob(job.id);
+          });
+        } else if (action === 'delete') {
+          return deletePost(job.postId).then(() => {
+            paperDB.deleteJob(job.id);
+          });
+        } else if (action === 'update') {
+          return updatePost(job.postId, job.state).then(() => {
+            paperDB.deleteJob(job.id);
+          });
+        }
+      })).then(() => {
+        // 작업이 완료된 경우 게시물 목록을 다시 로드하고,
+        // 대기 중인 작업 목록을 갱신합니다.
+        updatePostList();
+        updateJobList();
+      });
+    });
   }
 
   // 백그라운드 동기화 작업 요청
   function requestBackgroundSync () {
     // @ch8. 백그라운드 동기화 작업 등록
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.sync.register('job-' + userName);
+      });
+    }
   }
 
   // 서비스 워커에게 메시지 전달
@@ -195,7 +266,9 @@ $(function () {
   // Paper 초기 로딩
   (function init () {
     Promise.all([
-      updatePostList()
+      updatePostList(),
+      updateJobList(),
+      doJobs()
     ]);
   })();
 

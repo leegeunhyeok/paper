@@ -1,3 +1,5 @@
+importScripts('/js/paper-store.js');
+
 const VERSION = 'v5';
 const CACHE_NAME = 'paper-cache_' + VERSION;
 const IMAGE_CACHE_NAME = 'paper-image_' + VERSION;
@@ -106,6 +108,71 @@ self.addEventListener('fetch', (event) => {
               return networkResponse;
             });
           }
+        });
+      })
+    );
+  }
+});
+
+self.addEventListener('sync', (event) => {
+  if (event.tag.includes('job-')) {
+    const paperDB = new PaperStore();
+    const user = event.tag.split('-').pop();
+
+    event.waitUntil(
+      // user의 대기 중인 작업 조회
+      paperDB.getJobs(user).then((jobs) => {
+        return Promise.all(jobs.map((job) => {
+          const action = job.action;
+          console.log('Service Worker - job:', action);
+
+          // 업로드 작업
+          if (action === 'upload') {
+            // 폼 데이터
+            const formData = new FormData();
+            formData.append('title', job.title);
+            formData.append('content', job.content);
+            formData.append('image', job.image);
+
+            // 서버로 요청 보내기
+            return fetch('/api/posts', {
+              method: 'POST',
+              headers: {
+                'X-Paper-User': encodeURI(job.user)
+              },
+              body: formData
+            }).then(() => {
+              // 성공한 경우 작업 데이터 삭제
+              paperDB.deleteJob(job.id);
+            });
+          } else if (action === 'delete') {
+            return fetch('/api/posts/' + job.postId, {
+              method: 'DELETE',
+              headers: {
+                'X-Paper-User': encodeURI(job.user)
+              }
+            }).then(() => {
+              paperDB.deleteJob(job.id);
+            });
+          } else if (action === 'update') {
+            return fetch('/api/posts/' + job.postId, {
+              method: 'PUT',
+              headers: {
+                'X-Paper-User': encodeURI(job.user),
+                // JSON 데이터에 맞게 컨텐츠 타입 지정
+                'Content-Type': 'application/json'
+              },
+              // 본문
+              body: JSON.stringify({
+                state: job.state // 작업 데이터에 저장되어있던 좋아요 상태
+              })
+            }).then(() => {
+              paperDB.deleteJob(job.id);
+            });
+          }
+        })).then(() => {
+          // 모든 작업 완료
+          console.log('Service Worker - Job finished!');
         });
       })
     );
