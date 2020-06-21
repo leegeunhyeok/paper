@@ -48,7 +48,6 @@
 - [챕터 8](https://github.com/leegeunhyeok/paper/tree/ch8) - Sync, 백그라운드 동기화
 - [챕터 9](https://github.com/leegeunhyeok/paper/tree/ch9) - 서비스 워커와 클라이언트간 메시지 주고받기
 - [챕터 10](https://github.com/leegeunhyeok/paper/tree/ch10) - Push, 사용자에게 알림 보내기
-- [최종 코드 (챕터10 + 부록)](https://github.com/leegeunhyeok/paper/tree/final) - Paper 최종본
 
 ## 프로젝트 구조
 
