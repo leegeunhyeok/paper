@@ -17,6 +17,140 @@
       ];
 
       // 코드 작성
+      let db = null;
+      const DB_VERSION = 2; // 데이터베이스 버전
+      const request = window.indexedDB.open('user-db', DB_VERSION);
+
+      request.onerror = function (event) {
+        console.error(event);
+      };
+
+      request.onsuccess = function (event) {
+        db = request.result; // event.target.result
+
+        // 6.4.1. 데이터 추가하기
+        // const newUser = { id: 'user06', age: 9, name: 'Harry' };
+        // const transaction = db.transaction('user', 'readwrite');
+        // const userStore = transaction.objectStore('user');
+        // const addRequest = userStore.add(newUser);
+
+        // addRequest.onsuccess = function () {
+        //   console.log('newUser added!');
+        // }
+
+        // addRequest.onerror = function (event) {
+        //   console.error(event);
+        // }
+
+        // 6.4.2. 데이터 조회하기 (get)
+        // db.transaction('user')
+        //   .objectStore('user')
+        //   .index('user_name') // user_name 색인 사용
+        //   .get('Jessica')
+        //   .onsuccess = function (event) {
+        //     console.log(event.target.result);
+        //   }
+
+        // 6.4.2. 데이터 조회하기 (cursor)
+        // const cursorRequest = db.transaction('user')
+        //   .objectStore('user')
+        //   .index('user_age')
+        //   .openCursor(IDBKeyRange.lowerBound(10), 'prev');
+
+        // cursorRequest.onsuccess = function (event) {
+        //   const cursor = event.target.result;
+        //   if (cursor) {
+        //     console.log(cursor.value);
+        //     cursor.continue();
+        //   } else {
+        //     console.log('End!');
+        //   }
+        // }
+
+        // 6.4.3. 데이터 수정하기 (put)
+        // const updatedData = { id: 'user07', age: 6, name: 'John' };
+
+        // db.transaction('user', 'readwrite')
+        //   .objectStore('user')
+        //   .put(updatedData)
+        //   .onsuccess = function () {
+        //     console.log('Updated!');
+        //   }
+
+        // 6.4.3. 데이터 수정하기 (cursor)
+        // const cursorRequest = db.transaction('user', 'readwrite')
+        //   .objectStore('user')
+        //   .openCursor();
+
+        // cursorRequest.onsuccess = function (event) {
+        //   const cursor = event.target.result;
+        //   if (cursor) {
+        //     const user = cursor.value;
+        //     if (user.id === 'user01') {
+        //       user.age = 6;
+        //       cursor.update(user);
+        //     }
+        //     cursor.continue();
+        //   } else {
+        //     console.log('End!');
+        //   }
+        // }
+
+        // 6.4.4. 데이터 삭제하기 (delete)
+        // db.transaction('user', 'readwrite')
+        //   .objectStore('user')
+        //   .delete('user06')
+        //   .onsuccess = function () {
+        //     console.log('Deleted!');
+        //   }
+
+        // 6.4.4. 데이터 삭제하기 (cursor)
+        // const cursorRequest = db.transaction('user', 'readwrite')
+        //   .objectStore('user')
+        //   .openCursor();
+
+        // cursorRequest.onsuccess = function (event) {
+        //   const cursor = event.target.result;
+        //   if (cursor) {
+        //     const user = cursor.value;
+        //     if (user.age < 15) {
+        //       cursor.delete(user);
+        //     }
+        //     cursor.continue();
+        //   } else {
+        //     console.log('End!');
+        //   }
+        // }
+
+        // 6.4.4. 데이터 삭제하기 (clear)
+        // db.transaction('user', 'readwrite')
+        //   .objectStore('user')
+        //   .clear()
+        //   .onsuccess = function () {
+        //     console.log('Cleared!');
+        //   }
+      };
+
+      request.onupgradeneeded = function (event) {
+        console.log('OLD', event.oldVersion); // 이전 데이터베이스 버전
+        console.log('NEW', DB_VERSION);
+        const db = request.result;
+
+        if (event.oldVersion < 2) { 
+          const userStore = db.createObjectStore('user', { keyPath: 'id' });
+
+          // 유저 데이터 객체 저장소에 저장
+          userList.forEach((user) => {
+            userStore.add(user);
+          });
+        }
+
+        if (event.oldVersion < 3) { 
+          const userStore = request.transaction.objectStore('user');
+          userStore.createIndex('user_name', 'name', { unique: true });
+          userStore.createIndex('user_age', 'age');
+        }
+      };
     </script>
   </body>
 </html>
