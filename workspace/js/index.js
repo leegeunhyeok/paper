@@ -108,31 +108,31 @@ $(function () {
   }
 
   // 좋아요 핸들러
-function onFavorite (id, state) {
-  updatePost(id, state)
-    .then(() => {
-      // @ch6. IndexedDB 게시물 좋아요 상태 갱신
-    })
-    .catch(() => {
-      // @ch8. 게시물 업데이트 작업 등록
-    });
-}
+  function onFavorite (id, state) {
+    updatePost(id, state)
+      .then(() => {
+        // @ch6. IndexedDB 게시물 좋아요 상태 갱신
+      })
+      .catch(() => {
+        // @ch8. 게시물 업데이트 작업 등록
+      });
+  }
 
   // 게시물 삭제 이벤트 핸들러
   function onDelete (id) {
     app.showLoading(true);
-  deletePost(id)
-    .then((post) => {
-      app.removePost(post.id);
+    deletePost(id)
+      .then((post) => {
+        app.removePost(post.id);
 
-      // @ch6. IndexedDB에 저장되어있던 게시물 삭제
-    })
-    .catch(() => {
-      // @ch8. 게시물 삭제 작업 등록
-    })
-    .finally(() => {
-      app.showLoading(false);
-    });
+        // @ch6. IndexedDB에 저장되어있던 게시물 삭제
+      })
+      .catch(() => {
+        // @ch8. 게시물 삭제 작업 등록
+      })
+      .finally(() => {
+        app.showLoading(false);
+      });
   }
 
   // 동기화 작업 취소 핸들러
