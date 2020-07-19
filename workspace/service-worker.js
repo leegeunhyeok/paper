@@ -236,6 +236,7 @@ self.addEventListener('push', (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
+  console.log('Service Worker - Notification clicked!');
   event.notification.close();
   event.waitUntil(
     self.clients.openWindow('https://google.com')
