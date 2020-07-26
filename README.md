@@ -41,7 +41,7 @@
 - 챕터 1 - 시작하기
 - 챕터 2 - 실습을 위한 개발환경 준비하기
 - 챕터 3 - 프로그레시브 웹 앱이 되기 위한 준비
-- [챕터 4](https://github.com/leegeunhyeok/paper/tree/ch4) - PWA의 심장, 서비스 워커
+- [챕터 4](https://github.com/leegeunhyeok/paper/tree/ch4) - PWA의 핵심, 서비스 워커
 - [챕터 5](https://github.com/leegeunhyeok/paper/tree/ch5) - 오프라인을 위한 캐시 스토리지 API
 - [챕터 6](https://github.com/leegeunhyeok/paper/tree/ch6) - IndexedDB 사용하기
 - [챕터 7](https://github.com/leegeunhyeok/paper/tree/ch7) - 웹 앱 매니페스트 (Web App Manifest)
