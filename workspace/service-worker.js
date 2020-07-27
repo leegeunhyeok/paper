@@ -144,8 +144,7 @@ self.addEventListener('sync', (event) => {
               },
               body: formData
             }).then(() => {
-              // 성공한 경우 작업 데이터 삭제
-              paperDB.deleteJob(job.id);
+              return paperDB.deleteJob(job.id);
             });
           } else if (action === 'delete') {
             return fetch('/api/posts/' + job.postId, {
@@ -154,7 +153,7 @@ self.addEventListener('sync', (event) => {
                 'X-Paper-User': encodeURI(job.user)
               }
             }).then(() => {
-              paperDB.deleteJob(job.id);
+              return paperDB.deleteJob(job.id);
             });
           } else if (action === 'update') {
             return fetch('/api/posts/' + job.postId, {
@@ -169,7 +168,7 @@ self.addEventListener('sync', (event) => {
                 state: job.state // 작업 데이터에 저장되어있던 좋아요 상태
               })
             }).then(() => {
-              paperDB.deleteJob(job.id);
+              return paperDB.deleteJob(job.id);
             });
           }
         })).then(() => {

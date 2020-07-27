@@ -233,15 +233,15 @@ $(function () {
 
         if (action === 'upload') {
           return uploadPost(job.title, job.content, job.image).then(() => {
-            paperDB.deleteJob(job.id);
+            return paperDB.deleteJob(job.id);
           });
         } else if (action === 'delete') {
           return deletePost(job.postId).then(() => {
-            paperDB.deleteJob(job.id);
+            return paperDB.deleteJob(job.id);
           });
         } else if (action === 'update') {
           return updatePost(job.postId, job.state).then(() => {
-            paperDB.deleteJob(job.id);
+            return paperDB.deleteJob(job.id);
           });
         }
       })).then(() => {
