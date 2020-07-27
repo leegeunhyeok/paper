@@ -7,6 +7,12 @@
 
 </div>
 
+## 원고 오류사항
+
+발견된 내용 오류 사항들을 정리한 링크입니다. 확실하게 검토하지 못한 점 대단히 죄송합니다 😥
+
+- [8장] 백그라운드 동기화 return 누락, [확인하기](https://github.com/leegeunhyeok/paper/issues/3)
+
 ## 주요 기능
 
 <img width="250" src="./pwa.png">
