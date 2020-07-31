@@ -5,8 +5,6 @@ if (!localStorage.getItem('name')) {
 
 // window.onload
 $(function () {
-  // 게시물 업데이트 중 여부
-  let updating = false;
   // 푸시 지원 여부
   let pushSupport = false;
   // 사용자 구독 정보
@@ -78,10 +76,6 @@ $(function () {
 
   // 게시물 목록 업데이트
   function updatePostList () {
-    if (updating || void (updating = true)) {
-      return;
-    }
-
     app.clearPost();
     // 게시물 가져오기
     return axios.get('/api/posts')
@@ -109,9 +103,6 @@ $(function () {
             onDelete
           });
         });
-      })
-      .finally(() => {
-        updating = false;
       });
   }
 
