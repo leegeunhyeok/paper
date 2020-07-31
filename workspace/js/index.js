@@ -187,10 +187,6 @@ $(function () {
   // Paper 초기 로딩
   (function init () {
     Promise.all([
-      updatePostList(),
-      updatePostList(),
-      updatePostList(),
-      updatePostList(),
       updatePostList()
     ]);
   })();
