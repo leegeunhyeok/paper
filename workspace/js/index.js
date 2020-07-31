@@ -5,8 +5,6 @@ if (!localStorage.getItem('name')) {
 
 // window.onload
 $(function () {
-  // 게시물 업데이트 중 여부
-  let updating = false;
   // 푸시 지원 여부
   let pushSupport = false;
   // 사용자 구독 정보
@@ -78,10 +76,6 @@ $(function () {
 
   // 게시물 목록 업데이트
   function updatePostList () {
-    if (updating || void (updating = true)) {
-      return;
-    }
-
     app.clearPost();
     // 게시물 가져오기
     return axios.get('/api/posts')
@@ -116,9 +110,6 @@ $(function () {
             onDelete
           });
         });
-      })
-      .finally(() => {
-        updating = false;
       });
   }
 
@@ -235,11 +226,13 @@ $(function () {
             return paperDB.deleteJob(job.id);
           });
         }
-      })).then(() => {
-        // 작업이 완료된 경우 게시물 목록을 다시 로드하고,
-        // 대기 중인 작업 목록을 갱신합니다.
-        updatePostList();
-        updateJobList();
+      })).then((results) => {
+        if (results.length) {
+          // 작업이 완료된 경우 게시물 목록을 다시 로드하고,
+          // 대기 중인 작업 목록을 갱신합니다.
+          updatePostList();
+          updateJobList();
+        }
       });
     });
   }
