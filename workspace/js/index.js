@@ -219,11 +219,13 @@ $(function () {
             return paperDB.deleteJob(job.id);
           });
         }
-      })).then(() => {
-        // 작업이 완료된 경우 게시물 목록을 다시 로드하고,
-        // 대기 중인 작업 목록을 갱신합니다.
-        updatePostList();
-        updateJobList();
+      })).then((results) => {
+        if (results.length) {
+          // 작업이 완료된 경우 게시물 목록을 다시 로드하고,
+          // 대기 중인 작업 목록을 갱신합니다.
+          updatePostList();
+          updateJobList();
+        }
       });
     });
   }
