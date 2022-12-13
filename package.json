@@ -27,7 +27,7 @@
     "colors": "^1.4.0",
     "config": "^3.3.1",
     "cookie-parser": "^1.4.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "multer": "^1.4.2",
     "web-push": "^3.4.4"
   },
